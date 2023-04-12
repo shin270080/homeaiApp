@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "802142596964",
+    "project_id": "homeai-40312",
+    "storage_bucket": "homeai-40312.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802142596964:android:18e5c2643ac449ff741471",
+        "android_client_info": {
+          "package_name": "com.homeai.himeai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802142596964-c3a6tqn4ranudgf7e7arav133hb6ksta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVbQvTvmcrQ36kJ41TJojR8z4y3gL6cjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802142596964-c3a6tqn4ranudgf7e7arav133hb6ksta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "802142596964-oue3o38k6qs9g5fc9uuudo8us4j2hfgd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.homeai.himeai"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
