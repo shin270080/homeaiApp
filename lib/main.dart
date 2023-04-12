@@ -1,161 +1,62 @@
-import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+// ハエ叩きゲーム完成
+void main() => runApp(MyApp());
 
-void main() {
-  runApp(ColorfulNumberRandomMovingBlockTapGame());
-}
-
-class ColorfulNumberRandomMovingBlockTapGame extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  _ColorfulNumberRandomMovingBlockTapGameState createState() =>
-      _ColorfulNumberRandomMovingBlockTapGameState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Fly Swatter Game',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: GameScreen(),
+    );
+  }
 }
 
-class _ColorfulNumberRandomMovingBlockTapGameState
-    extends State<ColorfulNumberRandomMovingBlockTapGame> {
+class GameScreen extends StatefulWidget {
+  @override
+  _GameScreenState createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  double _flyX = 0;
+  double _flyY = 0;
   int _score = 0;
-  int _highScore = 0;
-  int _seconds = 30;
-  Timer? _timer;
-  List<_Block> _blocks = [];
-  Random _random = Random();
 
-  void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_seconds > 0) {
-        setState(() {
-          _seconds--;
-        });
-      } else {
-        _stopGame();
-      }
-    });
-  }
-
-  void _stopGame() {
-    _timer?.cancel();
-    if (_score > _highScore) {
-      setState(() {
-        _highScore = _score;
-      });
-    }
+  void _onTapDown(TapDownDetails details) {
     setState(() {
-      _score = 0;
-      _seconds = 30;
-      _blocks = [];
+      _flyX = Random().nextInt(300).toDouble();
+      _flyY = Random().nextInt(500).toDouble();
+      _score += 1;
     });
-  }
-
-  void _startGame() {
-    _stopGame();
-    _startTimer();
-    _generateBlock();
-  }
-
-  void _generateBlock() {
-    setState(() {
-      _blocks.add(_Block(
-        number: _random.nextInt(9) + 1,
-        color: Color.fromRGBO(
-          _random.nextInt(256),
-          _random.nextInt(256),
-          _random.nextInt(256),
-          1.0,
-        ),
-        position: Offset(
-          _random.nextDouble() * MediaQuery.of(context).size.width,
-          _random.nextDouble() * MediaQuery.of(context).size.height,
-        ),
-        velocity: Offset(
-          (_random.nextDouble() - 0.5) * 10,
-          (_random.nextDouble() - 0.5) * 10,
-        ),
-      ));
-    });
-    Future.delayed(Duration(milliseconds: 1000), () {
-      if (_seconds > 0) {
-        _generateBlock();
-      }
-    });
-  }
-
-  void _onTap(_Block block) {
-    if (block.number == _score + 1) {
-      setState(() {
-        _score++;
-        _blocks.remove(block);
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Colorful Number Random Moving Block Tap Game',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Colorful Number Random Moving Block Tap Game'),
-        ),
-        body: Stack(
-          children: [
-            for (var block in _blocks)
-              Positioned(
-                left: block.position.dx,
-                top: block.position.dy,
-                child: GestureDetector(
-                  onTap: () => _onTap(block),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: block.color,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${block.number}',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            Positioned(
-              bottom: 20,
-              left: 20,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Score: $_score'),
-                  Text('High Score: $_highScore'),
-                  Text('Time Left: $_seconds seconds'),
-
-                  ElevatedButton(
-                    onPressed: () => _startGame(),
-                    child: Text('Start Game'),
-                  ),
-                ],
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Fly Swatter Game'),
+      ),
+      body: Stack(
+        children: [
+          Positioned(
+            left: _flyX,
+            top: _flyY,
+            child: GestureDetector(
+              child: Icon(Icons.baby_changing_station_outlined, size: 50),
+              onTapDown: _onTapDown,
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Text('Score: $_score', style: TextStyle(fontSize: 20)),
+          ),
+        ],
       ),
     );
-
   }
-}
-
-class _Block {
-  final int number;
-  final Color color;
-  Offset position;
-  Offset velocity;
-
-  _Block({
-    required this.number,
-    required this.color,
-    required this.position,
-    required this.velocity,
-  });
 }
